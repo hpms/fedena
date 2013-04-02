@@ -29,7 +29,7 @@ class CreateEmployees < ActiveRecord::Migration
       t.string     :blood_group
       t.references :nationality
 
-      
+
       t.string     :home_address_line1
       t.string     :home_address_line2
       t.string     :home_city
@@ -53,8 +53,7 @@ class CreateEmployees < ActiveRecord::Migration
 
       t.column   :photo_filename,       :string
       t.column   :photo_content_type,   :string
-      t.column   :photo_data,           :binary,
-        :limit => 5.megabytes
+      t.column   :photo_data,           :binary
 
       t.timestamps
     end
