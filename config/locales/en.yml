@@ -515,7 +515,7 @@ en: # locale
   address: "Address"
   city: "City"
   state: "State"
-  zip: "PIN code"
+  zip: "ZIP code"
   country: "Country"
   half_day: "Half Day"
   mobile: "Mobile"

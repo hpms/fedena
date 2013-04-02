@@ -118,37 +118,8 @@
         <hr class="label-underline"></hr>
 
         <div class="label-field-pair">
-          <label for="master_student_blood_group"><%= t('blood_group') %></label>
-          <div class="text-input-bg"><%= select :student, :blood_group, ["#{t('unknown')}","A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"],{ :prompt => "#{t('select_blood_group')}" },
-              :selected => @student.blood_group %></div>
-        </div>
-
-        <hr class="label-underline"></hr>
-
-        <div class="label-field-pair">
-          <label for="master_student_birth_place"><%= t('birth_place') %></label>
-          <div class="text-input-bg"><%= s.text_field :birth_place, :value =>@student.birth_place %></div>
-        </div>
-
-        <hr class="label-underline"></hr>
-
-        <div class="label-field-pair">
-          <label for="master_student_nationality"><%= t('nationality') %></label>
-          <div class="text-input-bg"><%= select :student, :nationality_id, Country.all.map {|c| [c.name, c.id]}, :selected => @student.nationality.id %></div>
-        </div>
-
-        <hr class="label-underline"></hr>
-
-        <div class="label-field-pair">
-          <label for="master_student_birth_place"><%= t('mother_tongue') %></label>
+          <label for="master_student_language"><%= t('mother_tongue') %></label>
           <div class="text-input-bg"><%= s.text_field :language, :value => @student.language %></div>
-        </div>
-
-        <hr class="label-underline"></hr>
-
-        <div class="label-field-pair">
-          <label for="master_student_religion"><%= t('religion') %></label>
-          <div class="text-input-bg"><%= s.text_field :religion, :value =>@student.religion %></div>
         </div>
 
         <hr class="label-underline"></hr>
@@ -196,13 +167,6 @@
         <div class="label-field-pair">
           <label for="master_student_pin_code"><%= t('zip') %></label>
           <div class="text-input-bg"><%= s.text_field :pin_code, :value =>@student.pin_code %></div>
-        </div>
-
-        <hr class="label-underline"></hr>
-
-        <div class="label-field-pair">
-          <label for="master_student_country"><%= t('country') %></label>
-          <div class="text-input-bg"><%= select :student, :country_id, Country.all.map {|c| [c.name, c.id]}, :selected => @student.country.id %></div>
         </div>
 
         <hr class="label-underline"></hr>

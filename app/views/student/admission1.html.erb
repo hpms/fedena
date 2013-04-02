@@ -173,13 +173,6 @@
         <hr class="label-underline"></hr>
 
         <div class="label-field-pair">
-          <label for="student_country"><%= t('country') %></label>
-          <div class="text-input-bg"> <%= select :student, :country_id, Country.all.map {|c| [c.name, c.id]}, :selected=> @student.country_id || @selected_value.to_i %> </div>
-        </div>
-
-        <hr class="label-underline"></hr>
-
-        <div class="label-field-pair">
           <label for="student_phone1"><%= t('phone') %></label>
           <div class="text-input-bg"><%= s.text_field :phone1 %></div>
         </div>
