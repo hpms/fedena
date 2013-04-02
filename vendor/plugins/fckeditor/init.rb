@@ -6,7 +6,7 @@ require 'fckeditor_file_utils'
 FckeditorFileUtils.check_and_install
 
 # make plugin controller available to app
-config.load_paths += %W(#{Fckeditor::PLUGIN_CONTROLLER_PATH} #{Fckeditor::PLUGIN_HELPER_PATH})
+config.autoload_paths += %W(#{Fckeditor::PLUGIN_CONTROLLER_PATH} #{Fckeditor::PLUGIN_HELPER_PATH})
 
 Rails::Initializer.run(:set_load_path, config)
 
@@ -18,7 +18,7 @@ require 'fckeditor_controller'
 # add a route for spellcheck
 class ActionController::Routing::RouteSet
   unless (instance_methods.include?('draw_with_fckeditor'))
-    class_eval <<-"end_eval", __FILE__, __LINE__  
+    class_eval <<-"end_eval", __FILE__, __LINE__
       alias draw_without_fckeditor draw
       def draw_with_fckeditor
         draw_without_fckeditor do |map|
