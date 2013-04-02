@@ -11,6 +11,7 @@ GEM
     activeresource (2.3.18)
       activesupport (= 2.3.18)
     activesupport (2.3.18)
+    cocaine (0.4.2)
     declarative_authorization (0.5.7)
     fattr (2.2.1)
     hoe (3.5.2)
@@ -18,6 +19,14 @@ GEM
     i18n (0.4.2)
     json (1.6.8)
     kgio (2.8.0)
+    mime-types (1.22)
+    paperclip (2.8.0)
+      activerecord (>= 2.3.0)
+      activesupport (>= 2.3.2)
+      cocaine (>= 0.0.2)
+      mime-types
+    paperclip_database (1.0.5)
+      paperclip (>= 2.3.0)
     pg (0.15.0)
     rack (1.1.6)
     rails (2.3.18)
@@ -54,6 +63,8 @@ PLATFORMS
 DEPENDENCIES
   declarative_authorization
   i18n (~> 0.4.0)
+  paperclip (~> 2.7)
+  paperclip_database
   pg
   rails (~> 2.3.18)
   rdoc

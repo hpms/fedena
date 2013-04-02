@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130110095412) do
+ActiveRecord::Schema.define(:version => 20130402023430) do
 
   create_table "additional_exam_groups", :force => true do |t|
     t.string  "name"
@@ -84,6 +84,12 @@ ActiveRecord::Schema.define(:version => 20130110095412) do
     t.integer "employee_id"
     t.integer "bank_field_id"
     t.string  "bank_info"
+  end
+
+  create_table "archived_employee_photos", :force => true do |t|
+    t.integer "archived_employee_id"
+    t.string  "style"
+    t.binary  "file_contents"
   end
 
   create_table "archived_employee_salary_structures", :force => true do |t|
@@ -180,6 +186,12 @@ ActiveRecord::Schema.define(:version => 20130110095412) do
     t.string   "education"
     t.datetime "created_at"
     t.datetime "updated_at"
+  end
+
+  create_table "archived_student_photos", :force => true do |t|
+    t.integer "archived_student_id"
+    t.string  "style"
+    t.binary  "file_contents"
   end
 
   create_table "archived_students", :force => true do |t|
@@ -1028,6 +1040,12 @@ ActiveRecord::Schema.define(:version => 20130110095412) do
 
   add_index "reminders", ["recipient"], :name => "index_reminders_on_recipient"
 
+  create_table "school_detail_logos", :force => true do |t|
+    t.integer "school_detail_id"
+    t.string  "style"
+    t.binary  "file_contents"
+  end
+
   create_table "school_details", :force => true do |t|
     t.integer  "school_id"
     t.string   "logo_file_name"
@@ -1082,6 +1100,12 @@ ActiveRecord::Schema.define(:version => 20130110095412) do
   create_table "student_categories", :force => true do |t|
     t.string  "name"
     t.boolean "is_deleted", :default => false, :null => false
+  end
+
+  create_table "student_photos", :force => true do |t|
+    t.integer "student_id"
+    t.string  "style"
+    t.binary  "file_contents"
   end
 
   create_table "student_previous_datas", :force => true do |t|

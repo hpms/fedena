@@ -9,6 +9,8 @@ gem 'i18n', '~> 0.4.0'
 gem 'wicked_pdf'
 gem 'unicorn'
 gem 'rush'
+gem 'paperclip', '~> 2.7'
+gem 'paperclip_database'
 
 group :development, :test do
   gem 'test-unit', '1.2.3'
