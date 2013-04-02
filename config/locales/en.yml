@@ -1348,7 +1348,7 @@ en: # locale
   mobile_phone_no: "Mobile Phone no."
   admission_no_of_last_stud: "Admission no. of last student is"
   birth_place: "Birth Place"
-  mother_tongue: "Mother Tongue"
+  mother_tongue: "Primary Language"
   religion: "Religion"
   address_line: "Address Line"
   phone: "Phone"
