@@ -34,11 +34,11 @@ class FinanceFeeCategory < ActiveRecord::Base
 
   def fees(student)
     FinanceFeeParticular.find_all_by_finance_fee_category_id(self.id,
-      :conditions => ["((student_category_id IS NULL AND admission_no IS NULL )OR(student_category_id = '#{student.student_category_id}'AND admission_no IS NULL) OR (student_category_id IS NULL AND admission_no = '#{student.admission_no}')) and is_deleted=0"])
+      :conditions => ["((student_category_id IS NULL AND admission_no IS NULL )OR(student_category_id = '#{student.student_category_id}'AND admission_no IS NULL) OR (student_category_id IS NULL AND admission_no = '#{student.admission_no}')) and is_deleted=FALSE"])
   end
 
   def check_fee_collection
-    fee_collection = FinanceFeeCollection.find_all_by_fee_category_id(self.id,:conditions=>{:is_deleted=>0})
+    fee_collection = FinanceFeeCollection.find_all_by_fee_category_id(self.id,:conditions=>{:is_deleted=>false})
     fee_collection.empty? ? true : false
   end
 
@@ -60,7 +60,7 @@ class FinanceFeeCategory < ActiveRecord::Base
 
   def student_fee_balance(student,date)
     particulars= FinanceFeeParticular.find_all_by_finance_fee_category_id(self.id,
-      :conditions => ["((student_category_id IS NULL AND admission_no IS NULL )OR(student_category_id = '#{student.student_category_id}'AND admission_no IS NULL) OR (student_category_id IS NULL AND admission_no = '#{student.admission_no}')) and is_deleted=0"])
+      :conditions => ["((student_category_id IS NULL AND admission_no IS NULL )OR(student_category_id = '#{student.student_category_id}'AND admission_no IS NULL) OR (student_category_id IS NULL AND admission_no = '#{student.admission_no}')) and is_deleted=FALSE"])
     financefee = student.finance_fee_by_date(date)
 
     paid_fees = FinanceTransaction.find(:all,:conditions=>"FIND_IN_SET(id,\"#{financefee.transaction_id}\")") unless financefee.transaction_id.blank?

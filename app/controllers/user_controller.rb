@@ -29,11 +29,11 @@ class UserController < ApplicationController
     return 'dashboard' if action_name == 'dashboard'
     'application'
   end
-  
+
   def all
     @users = User.active.all
   end
-  
+
   def list_user
     if params[:user_type] == 'Admin'
       @users = User.active.find(:all, :conditions => {:admin => true}, :order => 'first_name ASC')
@@ -96,7 +96,7 @@ class UserController < ApplicationController
 
   def list_parent_user
     batch = params[:batch_id]
-    @guardian = Guardian.find(:all, :select=>'guardians.*',:joins=>'INNER JOIN students ON students.id = guardians.ward_id', :conditions => 'students.batch_id = ' + batch + ' AND is_active=1',:order =>'first_name ASC')
+    @guardian = Guardian.find(:all, :select=>'guardians.*',:joins=>'INNER JOIN students ON students.id = guardians.ward_id', :conditions => 'students.batch_id = ' + batch + ' AND is_active=TRUE',:order =>'first_name ASC')
     users = @guardian.collect { |g| g.user}
     users.compact!
     @users  = users.paginate(:page=>params[:page],:per_page=>20)
@@ -104,7 +104,7 @@ class UserController < ApplicationController
   end
 
   def change_password
-    
+
     if request.post?
       @user = current_user
       if User.authenticate?(@user.username, params[:user][:old_password])
@@ -145,7 +145,7 @@ class UserController < ApplicationController
         end
       end
 
-      
+
     end
   end
 
@@ -154,14 +154,14 @@ class UserController < ApplicationController
 
     @user = User.new(params[:user])
     if request.post?
-          
+
       if @user.save
         flash[:notice] = "#{t('flash17')}"
         redirect_to :controller => 'user', :action => 'edit', :id => @user.username
       else
         flash[:notice] = "#{t('flash16')}"
       end
-           
+
     end
   end
 
@@ -174,7 +174,7 @@ class UserController < ApplicationController
     end
     redirect_to :controller => 'user'
   end
-  
+
   def dashboard
     @user = current_user
     @config = Configuration.available_modules

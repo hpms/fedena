@@ -21,7 +21,7 @@ class BatchesController < ApplicationController
   filter_access_to :all
   before_filter :login_required
   def index
-    @batches = @course.batches    
+    @batches = @course.batches
   end
 
   def new
@@ -37,7 +37,7 @@ class BatchesController < ApplicationController
         msg = []
         msg << "<ol>"
         course_id = @batch.course_id
-        @previous_batch = Batch.find(:first,:order=>'id desc', :conditions=>"batches.id < '#{@batch.id }' AND batches.is_deleted = 0 AND course_id = ' #{course_id }'",:joins=>"INNER JOIN subjects ON subjects.batch_id = batches.id  AND subjects.is_deleted = 0")
+        @previous_batch = Batch.find(:first,:order=>'id desc', :conditions=>"batches.id < '#{@batch.id }' AND batches.is_deleted = FALSE AND course_id = ' #{course_id }'",:joins=>"INNER JOIN subjects ON subjects.batch_id = batches.id  AND subjects.is_deleted = FALSE")
         unless @previous_batch.blank?
           subjects = Subject.find_all_by_batch_id(@previous_batch.id,:conditions=>'is_deleted=false')
           subjects.each do |subject|
@@ -70,12 +70,12 @@ class BatchesController < ApplicationController
       unless params[:import_fees].nil?
         fee_msg = []
         course_id = @batch.course_id
-        @previous_batch = Batch.find(:first,:order=>'id desc', :conditions=>"batches.id < '#{@batch.id }' AND batches.is_deleted = 0 AND course_id = ' #{course_id }'",:joins=>"INNER JOIN finance_fee_categories ON finance_fee_categories.batch_id = batches.id  AND finance_fee_categories.is_deleted = 0 AND is_master= 1")
+        @previous_batch = Batch.find(:first,:order=>'id desc', :conditions=>"batches.id < '#{@batch.id }' AND batches.is_deleted = FALSE AND course_id = ' #{course_id }'",:joins=>"INNER JOIN finance_fee_categories ON finance_fee_categories.batch_id = batches.id  AND finance_fee_categories.is_deleted = FALSE AND is_master= TRUE")
         unless @previous_batch.blank?
           fee_msg << "<ol>"
           categories = FinanceFeeCategory.find_all_by_batch_id(@previous_batch.id,:conditions=>'is_deleted=false and is_master=true')
           categories.each do |c|
-            particulars = c.fee_particulars.all(:conditions=>"admission_no IS NULL AND student_id IS NULL AND is_deleted = 0")
+            particulars = c.fee_particulars.all(:conditions=>"admission_no IS NULL AND student_id IS NULL AND is_deleted = FALSE")
             particulars.reject!{|pt|pt.deleted_category}
             batch_discounts = BatchFeeDiscount.find_all_by_finance_fee_category_id(c.id)
             category_discounts = StudentCategoryFeeDiscount.find_all_by_finance_fee_category_id(c.id)
@@ -126,7 +126,7 @@ class BatchesController < ApplicationController
       end
       flash[:warn_notice] =  err1 + err unless err.empty?
       flash[:fees_import] =  fee_msg unless fee_msg.nil?
-      
+
       redirect_to [@course, @batch]
     else
       @grade_types=[]

@@ -86,11 +86,11 @@ class MonthlyPayslip < ActiveRecord::Base
       active_employees_in_dept = Employee.find(:all,:select=>"id",:conditions=>"employee_department_id = #{dept_id}")
       archived_employees_in_dept = ArchivedEmployee.find(:all,:select=>"former_id",:conditions=>"employee_department_id = #{dept_id}")
       all_employees_in_dept = active_employees_in_dept.collect(&:id) + archived_employees_in_dept.collect{|a| a.former_id.to_i}
-      total_monthly_payslips = self.find(:all,:select=>"employee_id,amount,payroll_category_id,salary_date",:order => 'salary_date desc',:conditions => ["salary_date >= ? and salary_date <= ? and is_approved = 1 and employee_id IN (?)",start_date.to_date,end_date.to_date,all_employees_in_dept],:include=>[:payroll_category])
+      total_monthly_payslips = self.find(:all,:select=>"employee_id,amount,payroll_category_id,salary_date",:order => 'salary_date desc',:conditions => ["salary_date >= ? and salary_date <= ? and is_approved = TRUE and employee_id IN (?)",start_date.to_date,end_date.to_date,all_employees_in_dept],:include=>[:payroll_category])
     else
-      total_monthly_payslips = self.find(:all,:select=>"employee_id,amount,payroll_category_id,salary_date",:order => 'salary_date desc',:conditions => ["salary_date >= ? and salary_date <= ? and is_approved = 1",start_date.to_date,end_date.to_date],:include=>[:payroll_category])
+      total_monthly_payslips = self.find(:all,:select=>"employee_id,amount,payroll_category_id,salary_date",:order => 'salary_date desc',:conditions => ["salary_date >= ? and salary_date <= ? and is_approved = TRUE",start_date.to_date,end_date.to_date],:include=>[:payroll_category])
     end
-    
+
     employee_ids = []
     employee_ids = total_monthly_payslips.collect(&:employee_id) unless total_monthly_payslips.blank?
     unless employee_ids.blank?

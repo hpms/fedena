@@ -24,7 +24,7 @@ class Employee < ActiveRecord::Base
   belongs_to  :nationality, :class_name => 'Country'
   belongs_to  :user
   belongs_to  :reporting_manager,:class_name => "Employee"
-  
+
   has_many    :employees_subjects
   has_many    :subjects ,:through => :employees_subjects
   has_many    :timetable_entries
@@ -119,7 +119,7 @@ class Employee < ActiveRecord::Base
   end
   alias_method(:max_hours_day, :max_hours_per_day)
   alias_method(:max_hours_week, :max_hours_per_week)
-  
+
   def next_employee
     next_st = self.employee_department.employees.first(:conditions => "id>#{self.id}",:order => "id ASC")
     next_st ||= employee_department.employees.first(:order => "id ASC")
@@ -168,7 +168,7 @@ class Employee < ActiveRecord::Base
 
     monthly_payslips = MonthlyPayslip.find(:all,
       :order => 'salary_date desc',
-      :conditions => ["employee_id ='#{self.id}'and salary_date = '#{salary_date}' and is_approved = 1"])
+      :conditions => ["employee_id ='#{self.id}'and salary_date = '#{salary_date}' and is_approved = TRUE"])
     individual_payslip_category = IndividualPayslipCategory.find(:all,
       :order => 'salary_date desc',
       :conditions => ["employee_id ='#{self.id}'and salary_date >= '#{salary_date}'"])
@@ -211,7 +211,7 @@ class Employee < ActiveRecord::Base
 
   def salary(start_date,end_date)
     MonthlyPayslip.find_by_employee_id(self.id,:order => 'salary_date desc',
-      :conditions => ["salary_date >= '#{start_date.to_date}' and salary_date <= '#{end_date.to_date}' and is_approved = 1"]).salary_date
+      :conditions => ["salary_date >= '#{start_date.to_date}' and salary_date <= '#{end_date.to_date}' and is_approved = TRUE"]).salary_date
 
   end
 
@@ -243,11 +243,11 @@ class Employee < ActiveRecord::Base
       self.destroy
     end
   end
- 
+
 
   def all_salaries(start_date,end_date)
     MonthlyPayslip.find_all_by_employee_id(self.id,:select =>"distinct salary_date" ,:order => 'salary_date desc',
-      :conditions => ["salary_date >= '#{start_date.to_date}' and salary_date <= '#{end_date.to_date}' and is_approved = 1"])
+      :conditions => ["salary_date >= '#{start_date.to_date}' and salary_date <= '#{end_date.to_date}' and is_approved = TRUE"])
   end
 
   def self.calculate_salary(monthly_payslip,individual_payslip_category)
@@ -303,5 +303,5 @@ class Employee < ActiveRecord::Base
   def former_dependency
     FedenaPlugin.check_dependency(self,"former")
   end
-  
+
 end

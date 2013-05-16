@@ -67,7 +67,7 @@ class FinanceTransaction < ActiveRecord::Base
     expenses_total = 0
     fees_total =0
     salary = 0
-     
+
     unless hr.nil?
       salary = MonthlyPayslip.total_employees_salary(start_date, end_date)
       expenses_total += salary[:total_salary].to_f
@@ -82,7 +82,7 @@ class FinanceTransaction < ActiveRecord::Base
       else
         expenses_total +=d.amount
       end
-      
+
     end
     transactions_fees.each do |fees|
       income_total +=fees.amount
@@ -104,7 +104,7 @@ class FinanceTransaction < ActiveRecord::Base
         end
       end
     end
-    
+
     other_transactions.each do |t|
       if t.category.is_income? and t.master_transaction_id == 0
         income_total +=t.amount
@@ -113,7 +113,7 @@ class FinanceTransaction < ActiveRecord::Base
       end
     end
     income_total-expenses_total
-    
+
   end
 
   def self.total_fees(start_date,end_date)
@@ -165,19 +165,19 @@ class FinanceTransaction < ActiveRecord::Base
       #end
     end
     donations_income-donations_expenses
-    
+
   end
 
 
   def self.expenses(start_date,end_date)
     expenses = FinanceTransaction.find(:all, :select=>'finance_transactions.*', :joins=>' INNER JOIN finance_transaction_categories ON finance_transaction_categories.id = finance_transactions.category_id',\
-        :conditions => ["finance_transaction_categories.is_income = 0 and finance_transaction_categories.id != 1 and transaction_date >= '#{start_date}' and transaction_date <= '#{end_date}'"])
+        :conditions => ["finance_transaction_categories.is_income = FALSE and finance_transaction_categories.id != 1 and transaction_date >= '#{start_date}' and transaction_date <= '#{end_date}'"])
     expenses
   end
 
   def self.incomes(start_date,end_date)
     incomes = FinanceTransaction.find(:all, :select=>'finance_transactions.*', :joins=>' INNER JOIN finance_transaction_categories ON finance_transaction_categories.id = finance_transactions.category_id',\
-        :conditions => ["finance_transaction_categories.is_income = 1 and transaction_date >= '#{start_date}' and transaction_date <= '#{end_date}' "])
+        :conditions => ["finance_transaction_categories.is_income = TRUE and transaction_date >= '#{start_date}' and transaction_date <= '#{end_date}' "])
     incomes = incomes.reject{|income| (income.category.is_fixed or income.master_transaction_id != 0)}
     incomes
   end
@@ -228,7 +228,7 @@ class FinanceTransaction < ActiveRecord::Base
     transactions.each {|transaction| amount += transaction.amount}
     return {:amount=>amount,:category_type=>category_type}
   end
-  
+
   def add_voucher_or_receipt_number
     if self.category.is_income and self.master_transaction_id == 0
       last_transaction = FinanceTransaction.last(:conditions=>"receipt_no IS NOT NULL")

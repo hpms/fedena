@@ -24,8 +24,8 @@ class FinanceTransactionCategory < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of  :name, :case_sensitive => false
 
-  named_scope :expense_categories, :conditions => "is_income = false AND name NOT LIKE 'Salary'and deleted = 0"
-  # named_scope :income_categories, :conditions => "is_income = true AND name NOT IN ('Fee','Salary','Donation','Library','Hostel','Transport') and deleted = 0"
+  named_scope :expense_categories, :conditions => "is_income = false AND name NOT LIKE 'Salary'and deleted = FALSE"
+  # named_scope :income_categories, :conditions => "is_income = true AND name NOT IN ('Fee','Salary','Donation','Library','Hostel','Transport') and deleted = FALSE"
 
   #  def self.expense_categories
   #    FinanceTransactionCategory.all(:conditions => "is_income = false AND name NOT LIKE 'Salary'")
@@ -40,7 +40,7 @@ class FinanceTransactionCategory < ActiveRecord::Base
     FedenaPlugin::FINANCE_CATEGORY.each do |category|
       cat_names << "'#{category[:category_name]}'"
     end
-    self.find(:all,:conditions=>"is_income = true AND name NOT IN (#{cat_names.join(',')}) and deleted = 0")
+    self.find(:all,:conditions=>"is_income = true AND name NOT IN (#{cat_names.join(',')}) and deleted = FALSE")
   end
 
   def is_fixed

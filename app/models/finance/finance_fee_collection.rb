@@ -50,11 +50,11 @@ class FinanceFeeCollection < ActiveRecord::Base
 
   def check_transaction(transactions)
     transactions.finance_fees_id.nil? ? false : true
-   
+
   end
 
   def fee_table
-    self.finance_fees.all(:conditions=>"is_paid = 0")
+    self.finance_fees.all(:conditions=>"is_paid = FALSE")
   end
 
   def self.shorten_string(string, count)
@@ -84,7 +84,7 @@ class FinanceFeeCollection < ActiveRecord::Base
   end
 
   def create_associates
-    
+
     batch_discounts = BatchFeeDiscount.find_all_by_finance_fee_category_id(self.fee_category_id)
     batch_discounts.each do |discount|
       discount_attributes = discount.attributes
@@ -109,7 +109,7 @@ class FinanceFeeCollection < ActiveRecord::Base
       discount_attributes["finance_fee_collection_id"]= self.id
       StudentFeeCollectionDiscount.create(discount_attributes)
     end
-    particlulars = FinanceFeeParticular.find_all_by_finance_fee_category_id(self.fee_category_id,:conditions=>"is_deleted=0")
+    particlulars = FinanceFeeParticular.find_all_by_finance_fee_category_id(self.fee_category_id,:conditions=>"is_deleted=FALSE")
     particlulars.each do |p|
       particlulars_attributes = p.attributes
       particlulars_attributes.delete "finance_fee_category_id"
@@ -120,14 +120,14 @@ class FinanceFeeCollection < ActiveRecord::Base
 
   def fees_particulars(student)
     FeeCollectionParticular.find_all_by_finance_fee_collection_id(self.id,
-      :conditions => ["((student_category_id IS NULL AND admission_no IS NULL )OR(student_category_id = '#{student.student_category_id}'AND admission_no IS NULL) OR (student_category_id IS NULL AND admission_no = '#{student.admission_no}')) and is_deleted=0"])
+      :conditions => ["((student_category_id IS NULL AND admission_no IS NULL )OR(student_category_id = '#{student.student_category_id}'AND admission_no IS NULL) OR (student_category_id IS NULL AND admission_no = '#{student.admission_no}')) and is_deleted=FALSE"])
   end
 
   def transaction_total(start_date,end_date)
     trans = self.finance_transactions.all(:conditions=>"transaction_date >= '#{start_date}' AND transaction_date <= '#{end_date}'")
     total = trans.map{|t|t.amount}.sum
   end
-  
+
   def student_fee_balance(student)
     particulars= self.fees_particulars(student)
     financefee = self.fee_transactions(student.id)

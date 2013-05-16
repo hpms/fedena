@@ -46,8 +46,8 @@ class ArchivedStudent < ActiveRecord::Base
     :path => ":rails_root/public/system/:class/:attachment/:id/:style/:basename.:extension"
 
   def is_active_false
-    unless self.is_active==0
-      self.is_active=0
+    if is_active?
+      self.is_active = false
     end
   end
 
